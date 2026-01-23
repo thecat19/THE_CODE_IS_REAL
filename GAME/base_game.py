@@ -1,6 +1,7 @@
 print ("THE ONE PIECE IS REAL")
 # Example file showing a circle moving on screen
 import pygame
+from time import sleep
 
 # pygame setup
 pygame.init()
@@ -25,13 +26,29 @@ while running:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
+        print (player_pos)
+        if player_pos.y >= 0 + 20:
+
+            player_pos.y -= 300 * dt
+
     if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
+        if player_pos.y <= screen.get_height() - 20:
+            player_pos.y += 300 * dt
     if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
+        if player_pos.x >= 0 + 20:
+            player_pos.x -= 300 * dt
     if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
+        if player_pos.x <= screen.get_width() - 20:
+            player_pos.x += 300 * dt
+    if keys[pygame.K_SPACE]:
+        gravity = 100
+        print (gravity)
+        while True:
+            player_pos.y -= gravity
+            gravity += -10
+            sleep(1)
+            print ("b0b")
+            break
 
     # flip() the display to put your work on screen
     pygame.display.flip()
