@@ -1,7 +1,6 @@
 print ("THE ONE PIECE IS REAL")
 # Example file showing a circle moving on screen
 import pygame
-from time import sleep
 jumping = False
 # pygame setup
 pygame.init()
@@ -9,7 +8,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-
+y_velocity = 0
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 while running:
@@ -25,15 +24,7 @@ while running:
     pygame.draw.circle(screen, "red", player_pos, 40)
 
     keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_w]:
-        if player_pos.y >= 0 + 20:
-            player_pos.y -= 300 * dt
-
-    if keys[pygame.K_s]:
-        if player_pos.y <= screen.get_height() - 20:
-            player_pos.y += 300 * dt
-
+    
     if keys[pygame.K_a]:
         if player_pos.x >= 0 + 20:
             player_pos.x -= 300 * dt
@@ -45,14 +36,19 @@ while running:
     if keys[pygame.K_SPACE]:
         if jumping == False:
             jumping = True
-            gravity = 10
+            print ("jumping = true")
+            gravity = 1
+            y_velocity = 10
             print (gravity)
-            while jumping:
-                player_pos.y -= gravity
-                gravity -= 3 * dt
+            while jumping:              
+                y_velocity -= gravity
                 print ("b0b")
+                if gravity <= 0:
+                    print ("going up")
                 if player_pos.y >= 500:
                     jumping = False
+
+    player_pos.y += y_velocity
 
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -60,6 +56,6 @@ while running:
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for framerate-
     # independent physics.
-    dt = clock.tick(60) / 1000
+    dt = clock.tick(100) / 1000
     print (player_pos)
 pygame.quit()
