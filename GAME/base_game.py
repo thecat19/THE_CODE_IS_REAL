@@ -4,6 +4,10 @@ import pygame
 jumping = False
 # pygame setup
 pygame.init()
+
+velocity_y = 0
+gravity = 1
+jump_strength = -15
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
@@ -33,20 +37,21 @@ while running:
         if player_pos.x <= screen.get_width() - 20:
             player_pos.x += 300 * dt
 
-    if keys[pygame.K_SPACE]:
-        if jumping == False:
-            jumping = True
-            print ("jumping = true")
-            gravity = 1
-            y_velocity = 10
-            print (gravity)
-            while jumping:              
-                y_velocity -= gravity
-                print ("b0b")
-                if gravity <= 0:
-                    print ("going up")
-                if player_pos.y >= 500:
-                    jumping = False
+        # Trigger jump on KEYDOWN (not held down)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not is_jumping:
+                is_jumping = True
+                velocity_y = jump_strength
+
+    # Apply Gravity
+    player_pos.y += gravity
+    player_pos.y += velocity_y
+
+    # Ground Collision
+    if player_pos.y <= 500:
+        player_y = 200
+        is_jumping = False
+        velocity_y = 0
 
     player_pos.y += y_velocity
 
