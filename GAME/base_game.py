@@ -6,14 +6,14 @@ jumping = False
 pygame.init()
 
 velocity_y = 0
+floor = 620
 gravity = 1
-jump_strength = -15
+jump_strength = -20
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-y_velocity = 0
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+player_pos = pygame.Vector2(screen.get_width() / 2, 620)
 
 while running:
     # poll for events
@@ -37,23 +37,21 @@ while running:
         if player_pos.x <= screen.get_width() - 20:
             player_pos.x += 300 * dt
 
-        # Trigger jump on KEYDOWN (not held down)
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not is_jumping:
-                is_jumping = True
-                velocity_y = jump_strength
+    # Trigger jump on KEYDOWN (not held down)
+    if keys[pygame.K_SPACE] and not jumping:
+            jumping = True
+            velocity_y = jump_strength
 
     # Apply Gravity
-    player_pos.y += gravity
     player_pos.y += velocity_y
+    velocity_y += gravity
 
     # Ground Collision
-    if player_pos.y <= 500:
-        player_y = 200
-        is_jumping = False
+    if player_pos.y >= floor:
+        player_pos.y = floor
+        jumping = False
         velocity_y = 0
 
-    player_pos.y += y_velocity
 
     # flip() the display to put your work on screen
     pygame.display.flip()
