@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-player_pos = pygame.Vector2(screen.get_width() / 2, 620)
+player_pos = pygame.Vector2(screen.get_width() / 2, floor)
 
 while running:
     # poll for events
@@ -26,6 +26,7 @@ while running:
     screen.fill("purple")
 
     pygame.draw.circle(screen, "red", player_pos, 40)
+    pygame.draw.rect(screen,"red",200,200)
 
     keys = pygame.key.get_pressed()
     
@@ -52,12 +53,11 @@ while running:
         jumping = False
         velocity_y = 0
 
-
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
+    # limits FPS to 100
+    # dt is delta time in seconds since last frame, used for framerate
     # independent physics.
     dt = clock.tick(100) / 1000
     print (player_pos)
