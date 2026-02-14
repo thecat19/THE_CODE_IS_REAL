@@ -1,10 +1,10 @@
+import pickle
 print ("THE ONE PIECE IS REAL")
 # Example file showing a circle moving on screen
 import pygame
 jumping = False
 # pygame setup
 pygame.init()
-
 velocity_y = 0
 floor = 620
 gravity = 1
@@ -14,7 +14,13 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 player_pos = pygame.Vector2(screen.get_width() / 2, 620)
-
+save_file = "save.pkl"
+try:
+    with open(save_file ,'rb') as file:
+        player_pos = pickle.load(file)
+        print (player_pos)
+except (OSError,pickle.PickleError):
+    print ('fout')
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -62,3 +68,8 @@ while running:
     dt = clock.tick(100) / 1000
     print (player_pos)
 pygame.quit()
+try:
+    with open("save.pkl", 'wb') as file:
+        pickle.dump(player_pos,file, protocol=pickle.HIGHEST_PROTOCOL)
+except (OSError, pickle.PickleError) as e:
+    print ('fout')
