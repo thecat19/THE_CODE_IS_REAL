@@ -52,7 +52,7 @@ while running:
         mid = Vector2(block.left + block.width/2,block.top + block.height/2)
         horz_inside = player_pos.x >= block.left and player_pos.x <= block.left + block.width
 
-        dst_left = mid.x - player_pos.x + player_dim
+        dst_left = mid.x - (player_pos.x + player_dim)
         dst_right = player_pos.x - mid.x - player_dim
         dst_top = mid.y - (player_pos.y + player_dim)
         dst_bot = player_pos.y - mid.y -  player_dim
@@ -73,10 +73,16 @@ while running:
         #     player_pos.y -= 10
         # if under and (right or left):
         #     player_pos.y += 10
-        print (dst_top)
+        print (dst_bot)
         if (dst_top > 0 and dst_top < block.height/2 and horz_inside):
             velocity_y = 0
-            player_pos.y -= 0.5
+            player_pos.y -= 2                                                                 
+            gravity = 0
+        if (dst_bot > 0 and dst_bot < block.height/2 and horz_inside):
+            velocity_y = 0
+            player_pos.y += 0.5
+        if (dst_left > 0 and dst_left < block.height/2 and horz_inside):
+            player_pos.x -= 10
         # if block.colliderect (player):
             
 
@@ -106,6 +112,8 @@ while running:
     # Apply Gravity
     player_pos.y += velocity_y
     velocity_y += gravity
+
+    gravity = 1
 
     # Ground Collision
     if player_pos.y >= floor:

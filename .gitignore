@@ -1,2 +1,15 @@
 example.py
 ROJO/poop/aftman.toml
+GAME/save.pkl
+ROJO/GAM._/.gitignore
+ROJO/GAM._/aftman.toml
+ROJO/GAM._/default.project.json
+ROJO/GAM._/README.md
+ROJO/GAM._/selene.toml
+ROJO/GAM._/src/client/epic.client.luau
+ROJO/GAM._/src/client/init.client.luau
+ROJO/GAM._/src/server/init.server.luau
+ROJO/GAM._/src/server/leaderboard.server.luau
+ROJO/GAM._/src/server/new_brick.server.luau
+ROJO/GAM._/src/shared/Hello.luau
+ROJO/steal from this shiiiii/aftman.toml
