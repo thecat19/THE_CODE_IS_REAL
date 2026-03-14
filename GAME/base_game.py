@@ -1,9 +1,13 @@
 import pickle
+from time import sleep
+import math
 print ("THE ONE PIECE IS REAL")
 # Example file showing a circle moving on screen
 import pygame
 from pygame import *
+from math import *
 jumping = False
+timer = 0
 # pygame setup
 pygame.init()
 velocity_y = 0
@@ -20,9 +24,11 @@ save_file = "save.pkl"
 player_dim = 40
 button_pos = pygame.Vector2(0,0)
 button_size = pygame.Vector2(100,100)
+moving_plat = Vector2(300, 300)
 blocks = [
-    Rect(300, 300, 200,50),
-    Rect(screen.get_width()/2, screen.get_height()/2+100, 50, screen.get_height())
+    Rect(screen.get_width()/2, screen.get_height()/2+100, 50, screen.get_height()),
+    Rect(moving_plat.x,moving_plat.y, 200,50)
+    
 ]
 try:
     with open(save_file ,'rb') as file:
@@ -127,12 +133,20 @@ while running:
 
 
     gravity = 1
-    print (jumping)
+
     # Ground Collision
     if player_pos.y >= floor:
         player_pos.y = floor
         jumping = False
         velocity_y = 0
+    t = (sin(timer-pi/2)+ 1) / 2
+    new_pos = Vector2(100,100)
+    lerp_pos = moving_plat.lerp(new_pos,t)
+    blocks[1].left = lerp_pos.x
+    blocks[1].top = lerp_pos.y
+    timer += 1 * dt
+    print (timer)
+    
 
 
     # flip() the display to put your work on screen
