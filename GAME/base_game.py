@@ -7,6 +7,7 @@ jumping = False
 # pygame setup
 pygame.init()
 velocity_y = 0
+velocity_x = 0
 floor = 620
 gravity = 1
 jump_strength = -20
@@ -20,7 +21,8 @@ player_dim = 40
 button_pos = pygame.Vector2(0,0)
 button_size = pygame.Vector2(100,100)
 blocks = [
-    Rect(screen.get_width()/2, screen.get_height()/2+100, 50, 50)
+    Rect(300, 300, 200,50),
+    Rect(screen.get_width()/2, screen.get_height()/2+100, 50, screen.get_height())
 ]
 try:
     with open(save_file ,'rb') as file:
@@ -47,10 +49,37 @@ while running:
     pygame.draw.rect(screen,"blue",(button_pos,button_size))
     pygame.draw.circle(screen, "red", player_pos, player_dim)
     
+    keys = pygame.key.get_pressed()
+    
+    if keys[pygame.K_a]:
+        if player_pos.x >= 0 + 20:
+            velocity_x =+ -5
+
+    if keys[pygame.K_d]:
+        if player_pos.x <= screen.get_width() - 20:
+            velocity_x =+ 5
+
+    if keys[pygame.K_1]:
+        button_clicked
+    
+    if keys[pygame.K_0]:
+        print (player_pos)
+
+    # Trigger jump on KEYDOWN (not held down)
+    if keys[pygame.K_SPACE] and not jumping:
+            jumping = True
+            velocity_y = jump_strength
+    # Apply Gravity
+    player_pos.y += velocity_y
+    velocity_y += gravity
+
+
     for block in blocks:
         pygame.draw.rect(screen,"blue",block)
         mid = Vector2(block.left + block.width/2,block.top + block.height/2)
         horz_inside = player_pos.x >= block.left and player_pos.x <= block.left + block.width
+        vert_inside = player_pos.y >= block.top and player_pos.y <= block.top + block.height
+        ground_block = Vector2()
 
         dst_left = mid.x - (player_pos.x + player_dim)
         dst_right = player_pos.x - mid.x - player_dim
@@ -76,45 +105,29 @@ while running:
         print (dst_bot)
         if (dst_top > 0 and dst_top < block.height/2 and horz_inside):
             velocity_y = 0
-            player_pos.y -= 2                                                                 
+            jumping = False
+            player_pos.y -= 2
             gravity = 0
         if (dst_bot > 0 and dst_bot < block.height/2 and horz_inside):
             velocity_y = 0
             player_pos.y += 0.5
-        if (dst_left > 0 and dst_left < block.height/2 and horz_inside):
-            player_pos.x -= 10
+        if (dst_left > 0 and dst_left < block.width/2 and vert_inside):
+            velocity_x = 0
+            player_pos.x -= 0.5
+        if (dst_right > 0 and dst_right < block.width/2 and vert_inside):
+            velocity_x = 0
+            player_pos.x += 0.5
+
         # if block.colliderect (player):
-            
 
 
-    
-    keys = pygame.key.get_pressed()
-    
-    if keys[pygame.K_a]:
-        if player_pos.x >= 0 + 20:
-            player_pos.x -= 300 * dt
-    
-    if keys[pygame.K_1]:
-        button_clicked
-    
-    if keys[pygame.K_0]:
-        print (player_pos)
+    # apply x force
+    player_pos.x += velocity_x
+    velocity_x = 0
 
-    if keys[pygame.K_d]:
-        if player_pos.x <= screen.get_width() - 20:
-            player_pos.x += 300 * dt
-
-    # Trigger jump on KEYDOWN (not held down)
-    if keys[pygame.K_SPACE] and not jumping:
-            jumping = True
-            velocity_y = jump_strength
-
-    # Apply Gravity
-    player_pos.y += velocity_y
-    velocity_y += gravity
 
     gravity = 1
-
+    print (jumping)
     # Ground Collision
     if player_pos.y >= floor:
         player_pos.y = floor
